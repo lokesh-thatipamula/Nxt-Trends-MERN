@@ -1,5 +1,6 @@
 import {Component} from 'react'
 import {Route, Switch, Redirect} from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 import LoginForm from './components/LoginForm'
 import RegisterForm from './components/RegisterForm'
@@ -16,6 +17,43 @@ import './App.css'
 class App extends Component {
   state = {
     cartList: [],
+    username: Cookies.get('username'),
+  }
+
+  componentDidMount() {
+    this.getCartData()
+  }
+
+  componentDidUpdate() {
+    const {cartList, username} = this.state
+    const currentUsername = Cookies.get('username')
+
+    // If the person logged in/out changed, refresh the cart
+    if (currentUsername !== username) {
+      this.setState({username: currentUsername}, this.getCartData)
+    }
+
+    // Save the current cart to the current user's storage
+    if (currentUsername !== undefined) {
+      localStorage.setItem(
+        `cart_data_${currentUsername}`,
+        JSON.stringify(cartList),
+      )
+    }
+  }
+
+  getCartData = () => {
+    const username = Cookies.get('username')
+    if (username !== undefined) {
+      const cartData = localStorage.getItem(`cart_data_${username}`)
+      if (cartData !== null) {
+        this.setState({cartList: JSON.parse(cartData)})
+      } else {
+        this.setState({cartList: []})
+      }
+    } else {
+      this.setState({cartList: []})
+    }
   }
 
   //   TODO: Add your code for remove all cart items, increment cart item quantity, decrement cart item quantity, remove cart item

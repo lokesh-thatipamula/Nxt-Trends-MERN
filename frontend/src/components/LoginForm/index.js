@@ -26,10 +26,13 @@ class LoginForm extends Component {
     this.setState({otp: event.target.value})
   }
 
-  onSubmitSuccess = jwtToken => {
+  onSubmitSuccess = (jwtToken, username) => {
     const {history} = this.props
 
     Cookies.set('jwt_token', jwtToken, {
+      expires: 30,
+    })
+    Cookies.set('username', username, {
       expires: 30,
     })
     history.replace('/')
@@ -63,7 +66,7 @@ class LoginForm extends Component {
           this.setState({isOtpSent: true, showSubmitError: false, errorMsg: ''})
         } else {
           // Fallback if MFA not enabled for some reason
-          this.onSubmitSuccess(data.jwt_token)
+          this.onSubmitSuccess(data.jwt_token, username)
         }
       } else {
         this.onSubmitFailure(data.error_msg)
@@ -83,7 +86,7 @@ class LoginForm extends Component {
       const response = await fetch(url, options)
       const data = await response.json()
       if (response.ok === true) {
-        this.onSubmitSuccess(data.jwt_token)
+        this.onSubmitSuccess(data.jwt_token, username)
       } else {
         this.onSubmitFailure(data.error_msg)
       }
