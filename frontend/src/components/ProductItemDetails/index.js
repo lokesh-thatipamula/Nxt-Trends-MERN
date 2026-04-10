@@ -51,7 +51,8 @@ class ProductItemDetails extends Component {
       apiStatus: apiStatusConstants.inProgress,
     })
     const jwtToken = Cookies.get('jwt_token')
-    const apiUrl = `http://localhost:5005/products/${id}`
+    const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5005'
+    const apiUrl = `${apiBaseUrl}/products/${id}`
     const options = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,

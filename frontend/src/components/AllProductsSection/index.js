@@ -97,7 +97,8 @@ class AllProductsSection extends Component {
       searchInput,
       activeRatingId,
     } = this.state
-    const apiUrl = `http://localhost:5005/products?sort_by=${activeOptionId}&category=${activeCategoryId}&title_search=${searchInput}&rating=${activeRatingId}`
+    const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5005'
+    const apiUrl = `${apiBaseUrl}/products?sort_by=${activeOptionId}&category=${activeCategoryId}&title_search=${searchInput}&rating=${activeRatingId}`
     const options = {
       headers: {
         Authorization: `Bearer ${jwtToken}`,

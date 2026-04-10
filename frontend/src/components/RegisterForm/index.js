@@ -40,7 +40,8 @@ class RegisterForm extends Component {
     event.preventDefault()
     const {username, password, phoneNumber} = this.state
     const userDetails = {username, password, phoneNumber}
-    const url = 'http://localhost:5005/register'
+    const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5005'
+    const url = `${apiBaseUrl}/register`
     const options = {
       method: 'POST',
       headers: {
