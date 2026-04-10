@@ -46,7 +46,8 @@ class LoginForm extends Component {
     if (!isOtpSent) {
       // Step 1: Login to get OTP
       const userDetails = {username, password}
-      const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5005'
+      const apiBaseUrl =
+        process.env.REACT_APP_API_URL || 'http://localhost:5005'
       const url = `${apiBaseUrl}/login`
       const options = {
         method: 'POST',
@@ -69,7 +70,8 @@ class LoginForm extends Component {
       }
     } else {
       // Step 2: Verify OTP
-      const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5005'
+      const apiBaseUrl =
+        process.env.REACT_APP_API_URL || 'http://localhost:5005'
       const url = `${apiBaseUrl}/verify-otp`
       const options = {
         method: 'POST',
