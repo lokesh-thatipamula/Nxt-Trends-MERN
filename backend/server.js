@@ -1,28 +1,34 @@
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+require('dotenv').config();
+
+const authRoutes = require('./routes/auth');
+const productRoutes = require('./routes/products');
+const primeDealsRoutes = require('./routes/primeDeals');
 
 const app = express();
 
-app.use(cors({
-  origin: true,
-  credentials: true
-}));
-app.use(require('morgan')('dev'));
+// Middleware
+app.use(cors());
 app.use(express.json());
 
-// Database connection
-mongoose.connect(process.env.MONGODB_URI)
-.then(() => console.log('MongoDB successfully connected'))
-.catch((err) => console.log('MongoDB connection error:', err));
-
 // Routes
-app.use('/', require('./routes/auth'));
-app.use('/', require('./routes/products'));
-app.use('/', require('./routes/primeDeals'));
+app.use('/', authRoutes);
+app.use('/', productRoutes);
+app.use('/', primeDealsRoutes);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// MongoDB Connection
+const PORT = process.env.PORT || 5005;
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/nxt_trends';
+
+mongoose.connect(MONGO_URI)
+.then(() => {
+  console.log('Connected to MongoDB');
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+})
+.catch((err) => {
+  console.error('MongoDB connection error:', err);
 });
