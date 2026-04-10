@@ -30,6 +30,20 @@ class ProductItemDetails extends Component {
     this.getProductData()
   }
 
+  componentDidUpdate(prevProps) {
+    const {match} = this.props
+    const {params} = match
+    const {id} = params
+
+    const {match: prevMatch} = prevProps
+    const {params: prevParams} = prevMatch
+    const {id: prevId} = prevParams
+
+    if (id !== prevId) {
+      this.getProductData()
+    }
+  }
+
   getFormattedData = data => ({
     availability: data.availability,
     brand: data.brand,
@@ -49,6 +63,7 @@ class ProductItemDetails extends Component {
 
     this.setState({
       apiStatus: apiStatusConstants.inProgress,
+      quantity: 1,
     })
     const jwtToken = Cookies.get('jwt_token')
     const apiBaseUrl = process.env.REACT_APP_API_URL || 'http://localhost:5005'
